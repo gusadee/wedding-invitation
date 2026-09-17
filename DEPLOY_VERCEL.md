@@ -12,6 +12,8 @@ Undangan pernikahan ini sudah siap di-deploy ke **Vercel** dengan backend databa
 4. Buka file `supabase_schema.sql` di proyek ini, salin semua isinya, tempel di SQL Editor Supabase, lalu klik **Run**.
 5. Tabel `rsvp` beserta kebijakan keamanan publik (RLS) berhasil dibuat!
 
+> Jalankan file SQL ini setelah perubahan terbaru agar validasi jumlah tamu dan status kehadiran ikut diterapkan. Jumlah entri ucapan tidak dibatasi oleh aplikasi.
+
 ---
 
 ### Langkah 2: Ambil URL & Kunci API Supabase
@@ -34,6 +36,8 @@ Undangan pernikahan ini sudah siap di-deploy ke **Vercel** dengan backend databa
    - `SUPABASE_ANON_KEY` = (anon public key Anda)
 4. Klik **Deploy**!
 
+> Jangan masukkan `SUPABASE_SERVICE_ROLE_KEY`. Endpoint publik ini hanya menggunakan `SUPABASE_ANON_KEY`.
+
 #### Jika Deploy via Vercel CLI:
 Jalankan perintah berikut di terminal:
 ```bash
@@ -49,5 +53,5 @@ Lalu tambahkan environment variable di menu Project Settings -> Environment Vari
 - **Endpoint Serverless Vercel (`/api/rsvp`)**:
   - `GET /api/rsvp`: Mengambil data kehadiran & ucapan tamu secara realtime dari Supabase.
   - `POST /api/rsvp`: Menyimpan konfirmasi kehadiran & ucapan baru ke Supabase.
-- **Fallback Cerdas**: Jika dijalankan secara offline atau sebelum env var diisi, sistem tetap berfungsi normal menggunakan `localStorage` tanpa error.
+- **Validasi RSVP**: Data hanya dianggap berhasil setelah Supabase mengonfirmasi penyimpanan. Ucapan dapat dikirim sebanyak-banyaknya tanpa batas jumlah entri dari aplikasi.
 - **Dashboard Tamu**: Mempelai dapat membuka menu **Table Editor** -> `rsvp` di Supabase untuk melihat, memfilter, atau mengunduh (export to CSV/Excel) seluruh daftar tamu yang hadir.

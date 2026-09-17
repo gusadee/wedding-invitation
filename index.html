@@ -1059,7 +1059,7 @@
   }
 
   // ---------- RSVP & Wishes Feed & Database (Supabase / Vercel) ----------
-  var STORAGE_KEY = 'wedding_rsvp_wishes_v1';
+  var STORAGE_KEY = 'wedding_rsvp_wishes_v2';
   var lastRsvpText = '';
 
   function getStoredEntries(){
@@ -1189,7 +1189,7 @@
         throw new Error('Network response not ok');
       })
       .then(function(data){
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           saveStoredEntries(data);
           renderFeed(data, null);
         }
@@ -1230,29 +1230,33 @@
         timestamp: Date.now()
       };
 
-      // 1. Simpan langsung ke lokal & perbarui tampilan tanpa menunggu
-      var entries = getStoredEntries();
-      entries.unshift(newEntry);
-      saveStoredEntries(entries);
-      renderFeed(entries, newEntry.id);
+      function showSuccessfulRsvp(entry){
+        var entries = getStoredEntries();
+        entries.unshift(entry);
+        saveStoredEntries(entries);
+        renderFeed(entries, entry.id);
+        showToast('Konfirmasi kehadiran & ucapan dari ' + entry.name + ' berhasil dicatat!');
+        rsvpForm.style.display = 'none';
+        rsvpSuccess.classList.add('show');
+      }
 
-      // 2. Kirim ke Database / Vercel API
+      // Simpan ke database sebelum menampilkan status berhasil.
       if (window.location.protocol !== 'file:') {
         fetch('/api/rsvp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newEntry)
         }).then(function(res){
-          if (res.ok) fetchRemoteFeed();
-        }).catch(function(){});
+          if (!res.ok) throw new Error('RSVP gagal disimpan');
+          return res.json();
+        }).then(showSuccessfulRsvp).catch(function(){
+          showToast('Konfirmasi belum tersimpan. Silakan coba lagi.');
+        });
+        return;
       }
 
-      // Tampilkan notifikasi toast
-      showToast('Konfirmasi kehadiran & ucapan dari ' + name + ' berhasil dicatat!');
-
-      // Tampilkan status sukses
-      rsvpForm.style.display = 'none';
-      rsvpSuccess.classList.add('show');
+      // Mode file lokal tetap dapat dipakai untuk preview tanpa database.
+      showSuccessfulRsvp(newEntry);
     });
   }
 
