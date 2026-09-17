@@ -532,6 +532,26 @@
 
   /* ================= GALLERY ================= */
   .gallery-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:38px;}
+  .g-item{cursor:pointer;}
+  .g-item:focus-visible{outline:2px solid var(--charcoal); outline-offset:4px;}
+  .gallery-lightbox{
+    position:fixed; inset:0; z-index:1000; display:none; align-items:center; justify-content:center;
+    padding:24px; background:rgba(0,0,0,0.92);
+  }
+  .gallery-lightbox.show{display:flex;}
+  .gallery-lightbox-image{max-width:min(86vw, 720px); max-height:84vh; object-fit:contain; box-shadow:0 20px 70px rgba(0,0,0,0.45);}
+  .gallery-lightbox-caption{position:absolute; left:0; right:0; bottom:24px; color:var(--off-white); text-align:center; font-size:0.75rem; letter-spacing:0.22em; text-transform:uppercase;}
+  .gallery-lightbox-btn{position:absolute; border:1px solid rgba(247,245,240,0.55); background:rgba(0,0,0,0.35); color:var(--off-white); width:42px; height:42px; border-radius:50%; cursor:pointer; font-size:1.5rem; line-height:1;}
+  .gallery-lightbox-close{top:22px; right:22px; font-size:1.7rem;}
+  .gallery-lightbox-prev{left:18px; top:50%; transform:translateY(-50%);}
+  .gallery-lightbox-next{right:18px; top:50%; transform:translateY(-50%);}
+  @media (max-width:520px){
+    .gallery-lightbox{padding:16px;}
+    .gallery-lightbox-image{max-width:88vw; max-height:78vh;}
+    .gallery-lightbox-prev{left:8px;}
+    .gallery-lightbox-next{right:8px;}
+    .gallery-lightbox-caption{bottom:18px; font-size:0.65rem;}
+  }
   .g-item{position:relative; border:1px solid var(--charcoal); background:#101010; overflow:hidden;}
   .g-item.portrait{grid-row:span 2; aspect-ratio:3/4;}
   .g-item.landscape{grid-column:span 2; aspect-ratio:16/10;}
@@ -850,6 +870,14 @@
     </div>
   </section>
 
+  <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Pratinjau galeri">
+    <button type="button" class="gallery-lightbox-btn gallery-lightbox-close" id="galleryLightboxClose" aria-label="Tutup">&times;</button>
+    <button type="button" class="gallery-lightbox-btn gallery-lightbox-prev" id="galleryLightboxPrev" aria-label="Foto sebelumnya">&#8249;</button>
+    <img class="gallery-lightbox-image" id="galleryLightboxImage" alt="">
+    <button type="button" class="gallery-lightbox-btn gallery-lightbox-next" id="galleryLightboxNext" aria-label="Foto berikutnya">&#8250;</button>
+    <div class="gallery-lightbox-caption" id="galleryLightboxCaption"></div>
+  </div>
+
   <!-- ===================== FOOTER ===================== -->
   <footer class="dark">
     <svg class="orn" viewBox="0 0 200 24" width="150" height="18" fill="none" stroke="#F7F5F0" stroke-width="0.8"><line x1="0" y1="12" x2="80" y2="12" opacity="0.4"/><circle cx="100" cy="12" r="3" opacity="0.7"/><line x1="120" y1="12" x2="200" y2="12" opacity="0.4"/></svg>
@@ -864,6 +892,69 @@
 <script>
 (function(){
   "use strict";
+
+  // ---------- Galeri lightbox ----------
+  (function(){
+    var lightbox = document.getElementById('galleryLightbox');
+    var lightboxImage = document.getElementById('galleryLightboxImage');
+    var caption = document.getElementById('galleryLightboxCaption');
+    var galleryItems = Array.prototype.slice.call(document.querySelectorAll('.g-item'));
+    if (!lightbox || !lightboxImage || !galleryItems.length) return;
+
+    var currentIndex = 0;
+    var touchStartX = 0;
+
+    function showImage(index){
+      currentIndex = (index + galleryItems.length) % galleryItems.length;
+      var image = galleryItems[currentIndex].querySelector('img');
+      var label = galleryItems[currentIndex].querySelector('.g-caption');
+      if (!image) return;
+      lightboxImage.src = image.src;
+      lightboxImage.alt = image.alt || '';
+      caption.textContent = label ? label.textContent : image.alt;
+    }
+
+    function openLightbox(index){
+      showImage(index);
+      lightbox.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(){
+      lightbox.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    galleryItems.forEach(function(item, index){
+      item.setAttribute('tabindex', '0');
+      item.addEventListener('click', function(){ openLightbox(index); });
+      item.addEventListener('keydown', function(event){
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openLightbox(index);
+        }
+      });
+    });
+
+    document.getElementById('galleryLightboxClose').addEventListener('click', closeLightbox);
+    document.getElementById('galleryLightboxPrev').addEventListener('click', function(){ showImage(currentIndex - 1); });
+    document.getElementById('galleryLightboxNext').addEventListener('click', function(){ showImage(currentIndex + 1); });
+    lightbox.addEventListener('click', function(event){
+      if (event.target === lightbox) closeLightbox();
+    });
+    lightbox.addEventListener('touchstart', function(event){ touchStartX = event.changedTouches[0].screenX; }, {passive:true});
+    lightbox.addEventListener('touchend', function(event){
+      var distance = event.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(distance) < 45) return;
+      showImage(distance < 0 ? currentIndex + 1 : currentIndex - 1);
+    }, {passive:true});
+    document.addEventListener('keydown', function(event){
+      if (!lightbox.classList.contains('show')) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') showImage(currentIndex - 1);
+      if (event.key === 'ArrowRight') showImage(currentIndex + 1);
+    });
+  })();
 
   // ---------- Nama tamu undangan dari URL ----------
   // Contoh: index.html?to=Bapak%20Budi   atau   ?to=Ibu_Sari   atau   ?to=Saudara_Ahmad
