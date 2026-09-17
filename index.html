@@ -532,7 +532,7 @@
   }
 
   /* ================= GALLERY ================= */
-  .gallery-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:38px;}
+  .gallery-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); grid-auto-flow:dense; gap:14px; margin-top:38px; align-items:start;}
   .g-item{cursor:pointer;}
   .g-item:focus-visible{outline:2px solid var(--charcoal); outline-offset:4px;}
   .gallery-lightbox{
@@ -553,7 +553,7 @@
     .gallery-lightbox-next{right:8px;}
     .gallery-lightbox-caption{bottom:18px; font-size:0.65rem;}
   }
-  .g-item{position:relative; border:1px solid var(--charcoal); background:#101010; overflow:hidden;}
+  .g-item{position:relative; min-width:0; border:1px solid var(--charcoal); background:#101010; overflow:hidden;}
   .g-item.portrait{grid-row:span 2; aspect-ratio:3/4;}
   .g-item.landscape{grid-column:span 2; aspect-ratio:16/10;}
   .g-item.square{aspect-ratio:1/1;}
@@ -906,6 +906,7 @@
       'BDA_1303.JPG', 'BDA_1314.JPG', 'BDA_1324.JPG', 'BDA_1326.JPG',
       'BDA_1332.JPG', 'BDA_1338.JPG', 'BDA_1344.JPG'
     ];
+    var extraLayouts = ['square', 'portrait', 'square', 'landscape', 'square', 'portrait', 'square', 'landscape', 'square', 'portrait', 'square'];
     var existingItems = galleryGrid ? Array.prototype.slice.call(galleryGrid.querySelectorAll('.g-item')) : [];
     existingItems.forEach(function(item, index){
       var image = item.querySelector('img');
@@ -918,8 +919,11 @@
     if (galleryGrid) {
       for (var photoIndex = existingItems.length; photoIndex < photoFiles.length; photoIndex++) {
         var extraItem = document.createElement('div');
-        extraItem.className = 'g-item square';
-        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + (photoIndex + 1) + '"><div class="g-caption">Our Story ' + (photoIndex + 1) + '</div>';
+        var layoutIndex = photoIndex - existingItems.length;
+        var layoutClass = extraLayouts[layoutIndex] || 'square';
+        var storyNumber = String(photoIndex + 1).padStart(2, '0');
+        extraItem.className = 'g-item ' + layoutClass;
+        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + storyNumber + '"><div class="g-caption">Our Story ' + storyNumber + '</div>';
         galleryGrid.appendChild(extraItem);
       }
     }
