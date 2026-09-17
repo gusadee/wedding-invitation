@@ -559,12 +559,6 @@
   .g-item.square{aspect-ratio:1/1;}
   .g-item svg{position:absolute; inset:0; width:100%; height:100%;}
   .g-item img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-  .g-caption{
-    position:absolute; left:0; right:0; bottom:0; padding:10px 12px;
-    font-size:0.64rem; letter-spacing:0.16em; text-transform:uppercase; color:#F7F5F0;
-    background:linear-gradient(0deg, rgba(0,0,0,0.65), transparent);
-  }
-
   /* ================= FOOTER ================= */
   footer{padding:70px 32px 60px; text-align:center;}
   .footer-names{font-family:'Cormorant Garamond', serif; font-size:1.5rem; margin:14px 0 6px;}
@@ -835,35 +829,27 @@
       <div class="gallery-grid">
         <div class="g-item portrait">
           <img src="images/embedded-3.jpg" alt="Prewedding" loading="lazy">
-          <div class="g-caption">Prewedding</div>
         </div>
         <div class="g-item square">
           <img src="images/embedded-4.jpg" alt="Our Moment" loading="lazy">
-          <div class="g-caption">Our Moment</div>
         </div>
         <div class="g-item square">
           <img src="images/embedded-5.jpg" alt="Together" loading="lazy">
-          <div class="g-caption">Together</div>
         </div>
         <div class="g-item landscape">
           <img src="images/embedded-6.jpg" alt="Sacred Steps" loading="lazy">
-          <div class="g-caption">Sacred Steps</div>
         </div>
         <div class="g-item portrait">
           <img src="images/embedded-7.jpg" alt="The Pavilion" loading="lazy">
-          <div class="g-caption">The Pavilion</div>
         </div>
         <div class="g-item square">
           <img src="images/embedded-8.jpg" alt="Quiet Grace" loading="lazy">
-          <div class="g-caption">Quiet Grace</div>
         </div>
         <div class="g-item square">
           <img src="images/embedded-9.jpg" alt="Side by Side" loading="lazy">
-          <div class="g-caption">Side by Side</div>
         </div>
         <div class="g-item landscape">
           <img src="images/embedded-10.jpg" alt="Om Swastiastu" loading="lazy">
-          <div class="g-caption">Om Swastiastu</div>
         </div>
       </div>
       <p class="form-note" style="margin-top:22px;">Galeri foto akan diperbarui menjelang hari bahagia.</p>
@@ -875,7 +861,6 @@
     <button type="button" class="gallery-lightbox-btn gallery-lightbox-prev" id="galleryLightboxPrev" aria-label="Foto sebelumnya">&#8249;</button>
     <img class="gallery-lightbox-image" id="galleryLightboxImage" alt="">
     <button type="button" class="gallery-lightbox-btn gallery-lightbox-next" id="galleryLightboxNext" aria-label="Foto berikutnya">&#8250;</button>
-    <div class="gallery-lightbox-caption" id="galleryLightboxCaption"></div>
   </div>
 
   <!-- ===================== FOOTER ===================== -->
@@ -897,7 +882,6 @@
   (function(){
     var lightbox = document.getElementById('galleryLightbox');
     var lightboxImage = document.getElementById('galleryLightboxImage');
-    var caption = document.getElementById('galleryLightboxCaption');
     var galleryGrid = document.querySelector('.gallery-grid');
     var photoFiles = [
       'images/bda_0940.jpg', 'images/bda_0970.jpg', 'images/bda_1065.jpg', 'images/bda_1092.jpg',
@@ -923,7 +907,7 @@
         var layoutClass = extraLayouts[layoutIndex] || 'square';
         var storyNumber = String(photoIndex + 1).padStart(2, '0');
         extraItem.className = 'g-item ' + layoutClass;
-        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + storyNumber + '"><div class="g-caption">Our Story ' + storyNumber + '</div>';
+        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + storyNumber + '">';
         galleryGrid.appendChild(extraItem);
       }
     }
@@ -936,11 +920,9 @@
     function showImage(index){
       currentIndex = (index + galleryItems.length) % galleryItems.length;
       var image = galleryItems[currentIndex].querySelector('img');
-      var label = galleryItems[currentIndex].querySelector('.g-caption');
       if (!image) return;
       lightboxImage.src = image.src;
       lightboxImage.alt = image.alt || '';
-      caption.textContent = label ? label.textContent : image.alt;
     }
 
     function openLightbox(index){
