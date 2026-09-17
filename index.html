@@ -898,6 +898,31 @@
     var lightbox = document.getElementById('galleryLightbox');
     var lightboxImage = document.getElementById('galleryLightboxImage');
     var caption = document.getElementById('galleryLightboxCaption');
+    var galleryGrid = document.querySelector('.gallery-grid');
+    var photoFiles = [
+      'BDA_0940.JPG', 'BDA_0970.JPG', 'BDA_1065.JPG', 'BDA_1092.JPG',
+      'BDA_1123.JPG', 'BDA_1156.JPG', 'BDA_1171.JPG', 'BDA_1227.JPG',
+      'BDA_1233.JPG', 'BDA_1250.JPG', 'BDA_1261.JPG', 'BDA_1272.JPG',
+      'BDA_1303.JPG', 'BDA_1314.JPG', 'BDA_1324.JPG', 'BDA_1326.JPG',
+      'BDA_1332.JPG', 'BDA_1338.JPG', 'BDA_1344.JPG'
+    ];
+    var existingItems = galleryGrid ? Array.prototype.slice.call(galleryGrid.querySelectorAll('.g-item')) : [];
+    existingItems.forEach(function(item, index){
+      var image = item.querySelector('img');
+      if (image && photoFiles[index]) {
+        image.src = photoFiles[index];
+        image.removeAttribute('loading');
+        image.alt = 'Our Story ' + (index + 1);
+      }
+    });
+    if (galleryGrid) {
+      for (var photoIndex = existingItems.length; photoIndex < photoFiles.length; photoIndex++) {
+        var extraItem = document.createElement('div');
+        extraItem.className = 'g-item square';
+        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + (photoIndex + 1) + '"><div class="g-caption">Our Story ' + (photoIndex + 1) + '</div>';
+        galleryGrid.appendChild(extraItem);
+      }
+    }
     var galleryItems = Array.prototype.slice.call(document.querySelectorAll('.g-item'));
     if (!lightbox || !lightboxImage || !galleryItems.length) return;
 
