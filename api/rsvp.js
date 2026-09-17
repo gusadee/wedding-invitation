@@ -10,8 +10,11 @@ export default async function handler(req, res) {
     return;
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_ANON_KEY;
+  const cleanEnvValue = function(value){
+    return String(value || '').trim().replace(/^['"]|['"]$/g, '');
+  };
+  const supabaseUrl = cleanEnvValue(process.env.SUPABASE_URL).replace(/\/$/, '');
+  const supabaseKey = cleanEnvValue(process.env.SUPABASE_ANON_KEY);
 
   // GET: Ambil semua data RSVP dari Supabase
   if (req.method === 'GET') {
@@ -27,13 +30,14 @@ export default async function handler(req, res) {
         }
       });
       if (!response.ok) {
-        console.error('Supabase fetch error:', await response.text());
-        return res.status(502).json({ error: 'Gagal mengambil data RSVP' });
+        const errorText = await response.text();
+        console.error('Supabase fetch error:', errorText);
+        return res.status(502).json({ error: 'Gagal mengambil data RSVP', detail: errorText });
       }
       return res.status(200).json(await response.json());
     } catch (err) {
       console.error('Supabase fetch error:', err);
-      return res.status(502).json({ error: 'Gagal menghubungi database RSVP' });
+      return res.status(502).json({ error: 'Gagal menghubungi database RSVP', detail: err.message });
     }
   }
 
@@ -83,8 +87,9 @@ export default async function handler(req, res) {
       });
 
       if (!response.ok) {
-        console.error('Supabase insert error:', await response.text());
-        return res.status(502).json({ error: 'Gagal menyimpan RSVP' });
+        const errorText = await response.text();
+        console.error('Supabase insert error:', errorText);
+        return res.status(502).json({ error: 'Gagal menyimpan RSVP', detail: errorText });
       }
 
       const inserted = await response.json();
