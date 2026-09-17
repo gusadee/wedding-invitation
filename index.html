@@ -161,8 +161,7 @@
   .cover-guest{
     margin-top:10px;
     width:100%;
-    padding:12px 16px;
-    border:1px solid rgba(247,245,240,0.32);
+    padding:8px 16px;
     font-family:'Cormorant Garamond', serif;
     font-size:1.32rem;
     font-weight:500;
@@ -189,17 +188,19 @@
   .open-btn{
     margin-top:38px;
     font-family:'Jost',sans-serif;
-    background:transparent;
-    color:var(--off-white);
-    border:1px solid rgba(247,245,240,0.55);
-    padding:15px 40px;
-    font-size:0.72rem;
+    background:var(--off-white);
+    color:var(--black);
+    border:2px solid var(--off-white);
+    padding:16px 44px;
+    font-size:0.78rem;
+    font-weight:600;
     letter-spacing:0.32em;
     text-transform:uppercase;
     cursor:pointer;
-    transition:background 0.35s ease, color 0.35s ease;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+    transition:background 0.35s ease, color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
   }
-  .open-btn:hover{background:var(--off-white); color:var(--black);}
+  .open-btn:hover{background:transparent; color:var(--off-white); transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,0.5);}
   .open-btn:focus-visible{outline:2px solid var(--off-white); outline-offset:3px;}
 
   /* ================= HERO (post-open recap, top of scroll page) ================= */
