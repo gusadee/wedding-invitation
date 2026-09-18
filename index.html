@@ -110,7 +110,7 @@
   .reveal .g-item:nth-child(6){transform:translateX(16px) scale(0.98);}
   .reveal .g-item:nth-child(7){transform:translateY(18px) scale(0.98);}
   .reveal .g-item:nth-child(8){transform:translateX(-16px) scale(0.98);}
-  .reveal.in .g-item, .reveal.in .event-card, .reveal.in .mempelai-photo, .reveal.in .couple-block{opacity:1; transform:none;}
+  .reveal.in .g-item.photo-visible, .reveal.in .event-card, .reveal.in .mempelai-photo, .reveal.in .couple-block{opacity:1; transform:none;}
   .reveal.in .g-item:nth-child(2), .reveal.in .event-card:nth-child(2){transition-delay:0.18s;}
   .reveal.in .g-item:nth-child(3){transition-delay:0.36s;}
   .reveal.in .g-item:nth-child(4){transition-delay:0.54s;}
@@ -241,7 +241,8 @@
     background-size:cover; background-position:center 28%; background-repeat:no-repeat;
     min-height:78vh; display:flex; align-items:flex-end;
   }
-  .hero-photo .reveal{width:100%;}
+  .hero-photo .reveal{width:100%; padding-bottom:42px;}
+  .hero-photo .reveal.in{transform:translateY(42px);}
 
 
   /* ================= MEMPELAI ================= */
@@ -761,7 +762,7 @@
 
       <p class="venue-note" style="color:#F7F5F0;">Kami menantikan kehadiran Anda. Silakan tekan tombol di bawah untuk melihat lokasi tepatnya melalui Google Maps.</p>
 
-      <iframe class="map-preview" title="Preview lokasi acara" loading="lazy" allowfullscreen src="https://maps.app.goo.gl/67cT9sKWYqwZsX6o8"></iframe>
+      <iframe class="map-preview" title="Preview lokasi acara" loading="lazy" allowfullscreen src="https://www.google.com/maps?q=-8.3630455,114.6267327&z=17&output=embed"></iframe>
 
       <div class="venue-wrap">
         <a class="venue-btn" href="https://maps.app.goo.gl/67cT9sKWYqwZsX6o8" target="_blank" rel="noopener noreferrer">
@@ -1139,8 +1140,23 @@
       });
     }, {threshold:0.18});
     reveals.forEach(function(el){ io.observe(el); });
+
+    var photos = document.querySelectorAll('.g-item');
+    var photoIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('photo-visible');
+          photoIo.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    photos.forEach(function(photo, index){
+      photo.style.transitionDelay = ((index % 4) * 0.14) + 's';
+      photoIo.observe(photo);
+    });
   } else {
     reveals.forEach(function(el){ el.classList.add('in'); });
+    document.querySelectorAll('.g-item').forEach(function(photo){ photo.classList.add('photo-visible'); });
   }
 
   // ---------- Countdown ----------
