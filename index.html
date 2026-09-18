@@ -260,12 +260,18 @@
   .event-cards{display:flex; flex-direction:column; gap:18px; margin-top:40px;}
   .event-card{
     border:1px solid var(--charcoal);
-    padding:30px 22px;
+    padding:28px 22px 30px;
     text-align:center;
+    min-height:206px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
   }
-  .event-card .name{font-size:0.78rem; letter-spacing:0.36em; text-transform:uppercase; opacity:0.7; margin-bottom:16px;}
-  .event-card .day{font-family:'Cormorant Garamond', serif; font-weight:500; font-size:1.55rem;}
-  .event-card .date{font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.9rem; margin-top:2px;}
+  .event-card .name{font-size:0.7rem; letter-spacing:0.34em; text-transform:uppercase; opacity:0.68; margin-bottom:14px;}
+  .event-card .day{font-family:'Cormorant Garamond', serif; font-weight:500; font-size:1.45rem; line-height:1.15;}
+  .event-card .date{font-family:'Cormorant Garamond', serif; font-weight:600; font-size:1.65rem; line-height:1.15; margin-top:4px;}
+  .event-card .time{font-family:'Jost',sans-serif; font-size:0.76rem; letter-spacing:0.12em; text-transform:uppercase; opacity:0.82; margin-top:14px; padding-top:11px; border-top:1px solid rgba(247,245,240,0.22);}
 
   /* ================= LOKASI ================= */
   .venue-btn{
@@ -718,13 +724,13 @@
           <div class="name">Pawiwahan</div>
           <div class="day">Kamis</div>
           <div class="date">1 Oktober 2026</div>
-          <div class="date">09.00 Wita - Selesai</div>
+          <div class="time">09.00 Wita - Selesai</div>
         </div>
         <div class="event-card" style="border-color: rgba(247,245,240,0.3); color:#F7F5F0;">
           <div class="name">Resepsi</div>
           <div class="day">Jumat</div>
           <div class="date">2 Oktober 2026</div>
-          <div class="date">13.00 Wita - Selesai</div>
+          <div class="time">13.00 Wita - Selesai</div>
         </div>
       </div>
     </div>
