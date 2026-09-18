@@ -911,7 +911,8 @@
       var image = item.querySelector('img');
       if (image && photoFiles[index]) {
         image.src = photoFiles[index];
-        image.removeAttribute('loading');
+        image.loading = 'lazy';
+        image.decoding = 'async';
         image.alt = 'Our Story ' + (index + 1);
       }
     });
@@ -922,7 +923,7 @@
         var layoutClass = extraLayouts[layoutIndex] || 'square';
         var storyNumber = String(photoIndex + 1).padStart(2, '0');
         extraItem.className = 'g-item ' + layoutClass;
-        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + storyNumber + '">';
+        extraItem.innerHTML = '<img src="' + photoFiles[photoIndex] + '" alt="Our Story ' + storyNumber + '" loading="lazy" decoding="async">';
         galleryGrid.appendChild(extraItem);
       }
     }
