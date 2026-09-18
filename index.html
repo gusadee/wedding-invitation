@@ -892,11 +892,18 @@
     var lightboxImage = document.getElementById('galleryLightboxImage');
     var galleryGrid = document.querySelector('.gallery-grid');
     var photoFiles = [
-      'images/bda_0940.jpg', 'images/bda_0970.jpg', 'images/bda_1065.jpg', 'images/bda_1092.jpg',
+      'images/bda_1344.jpg', 'images/bda_0970.jpg', 'images/bda_1065.jpg', 'images/bda_1092.jpg',
       'images/bda_1123.jpg', 'images/bda_1156.jpg', 'images/bda_1171.jpg', 'images/bda_1227.jpg',
       'images/bda_1250.jpg', 'images/bda_1261.jpg', 'images/bda_1272.jpg',
       'images/bda_1303.jpg', 'images/bda_1314.jpg', 'images/bda_1326.jpg',
-      'images/bda_1338.jpg', 'images/bda_1344.jpg'
+      'images/bda_1338.jpg', 'images/bda_0940.jpg'
+    ];
+    var colorPhotoFiles = [
+      'BDA_1344.JPG', 'BDA_0970.JPG', 'BDA_1065.JPG', 'BDA_1092.JPG',
+      'BDA_1123.JPG', 'BDA_1156.JPG', 'BDA_1171.JPG', 'BDA_1227.JPG',
+      'BDA_1250.JPG', 'BDA_1261.JPG', 'BDA_1272.JPG',
+      'BDA_1303.JPG', 'BDA_1314.JPG', 'BDA_1326.JPG',
+      'BDA_1338.JPG', 'BDA_0940.JPG'
     ];
     var extraLayouts = ['square', 'portrait', 'square', 'landscape', 'square', 'portrait', 'square', 'landscape', 'square', 'portrait', 'square'];
     var existingItems = galleryGrid ? Array.prototype.slice.call(galleryGrid.querySelectorAll('.g-item')) : [];
@@ -929,7 +936,7 @@
       currentIndex = (index + galleryItems.length) % galleryItems.length;
       var image = galleryItems[currentIndex].querySelector('img');
       if (!image) return;
-      lightboxImage.src = image.src;
+      lightboxImage.src = colorPhotoFiles[currentIndex] || image.src;
       lightboxImage.alt = image.alt || '';
     }
 
