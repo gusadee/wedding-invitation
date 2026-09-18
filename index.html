@@ -100,6 +100,17 @@
   /* ---------- reveal ---------- */
   .reveal{opacity:0; transform:translateY(14px); transition:opacity 0.9s ease, transform 0.9s ease;}
   .reveal.in{opacity:1; transform:none;}
+  .reveal .g-item, .reveal .event-card, .reveal .mempelai-photo, .reveal .couple-block{
+    opacity:0; transform:translateY(18px); transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in .g-item, .reveal.in .event-card, .reveal.in .mempelai-photo, .reveal.in .couple-block{opacity:1; transform:none;}
+  .reveal.in .g-item:nth-child(2), .reveal.in .event-card:nth-child(2){transition-delay:0.08s;}
+  .reveal.in .g-item:nth-child(3){transition-delay:0.14s;}
+  .reveal.in .g-item:nth-child(4){transition-delay:0.2s;}
+  .reveal.in .g-item:nth-child(5){transition-delay:0.26s;}
+  .reveal.in .g-item:nth-child(6){transition-delay:0.32s;}
+  .reveal.in .g-item:nth-child(7){transition-delay:0.38s;}
+  .reveal.in .g-item:nth-child(8){transition-delay:0.44s;}
 
   /* ---------- ornaments ---------- */
   .orn{display:block; margin:0 auto; opacity:0.9;}
@@ -127,6 +138,11 @@
   }
   @media (min-width:520px){ #cover{ box-shadow:var(--shadow);} }
   #cover.opened{ opacity:0; transform:translateY(-24px); visibility:hidden; pointer-events:none; }
+  #cover.opening .cover-top{animation:coverLift 0.65s ease both;}
+  #cover.opening .cover-mid{animation:coverMidExit 0.8s ease both;}
+  #cover.opening .cover-bottom{animation:coverLift 0.65s ease both;}
+  @keyframes coverLift{to{opacity:0; transform:translateY(-18px);}}
+  @keyframes coverMidExit{to{opacity:0; transform:scale(0.97) translateY(-12px);}}
   #frame.locked{ overflow:hidden; height:100vh; }
 
   .cover-top, .cover-bottom{width:100%;}
@@ -666,7 +682,7 @@
   <!-- ===================== MEMPELAI ===================== -->
   <section id="mempelai" class="light">
     <div class="reveal">
-      <div class="mempelai-photo"><img src="images/bda_1123.jpg" alt="Ari Wirya & Putu Ayu" loading="lazy"></div>
+      <div class="mempelai-photo"><img src="images/bda_1123.jpg" alt="Ari Wirya & Putu Ayu" loading="lazy" decoding="async"></div>
       <div class="eyebrow">Mempelai</div>
       <h2 class="title" style="font-size:1.9rem; margin-top:14px;">Om Swastiastu</h2>
       <p class="lede">Atas asung kertha wara nugraha Ida Sang Hyang Widhi Wasa, izinkan kami mempersembahkan pernikahan putra-putri kami.</p>
@@ -839,28 +855,28 @@
 
       <div class="gallery-grid">
         <div class="g-item portrait">
-          <img src="images/embedded-3.jpg" alt="Prewedding" loading="lazy">
+          <img src="images/bda_0940.jpg" alt="Prewedding" loading="lazy" decoding="async">
         </div>
         <div class="g-item square">
-          <img src="images/embedded-4.jpg" alt="Our Moment" loading="lazy">
+          <img src="images/bda_0970.jpg" alt="Our Moment" loading="lazy" decoding="async">
         </div>
         <div class="g-item square">
-          <img src="images/embedded-5.jpg" alt="Together" loading="lazy">
+          <img src="images/bda_1065.jpg" alt="Together" loading="lazy" decoding="async">
         </div>
         <div class="g-item landscape">
-          <img src="images/embedded-6.jpg" alt="Sacred Steps" loading="lazy">
+          <img src="images/bda_1092.jpg" alt="Sacred Steps" loading="lazy" decoding="async">
         </div>
         <div class="g-item portrait">
-          <img src="images/embedded-7.jpg" alt="The Pavilion" loading="lazy">
+          <img src="images/bda_1123.jpg" alt="The Pavilion" loading="lazy" decoding="async">
         </div>
         <div class="g-item square">
-          <img src="images/embedded-8.jpg" alt="Quiet Grace" loading="lazy">
+          <img src="images/bda_1156.jpg" alt="Quiet Grace" loading="lazy" decoding="async">
         </div>
         <div class="g-item square">
-          <img src="images/embedded-9.jpg" alt="Side by Side" loading="lazy">
+          <img src="images/bda_1171.jpg" alt="Side by Side" loading="lazy" decoding="async">
         </div>
         <div class="g-item landscape">
-          <img src="images/embedded-10.jpg" alt="Om Swastiastu" loading="lazy">
+          <img src="images/bda_1227.jpg" alt="Om Swastiastu" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -1045,9 +1061,11 @@
   }
 
   openBtn.addEventListener('click', function(){
-    cover.classList.add('opened');
+    cover.classList.add('opening');
     frame.classList.remove('locked');
     document.body.style.overflow = '';
+
+    setTimeout(function(){ cover.classList.add('opened'); }, 700);
 
     var bgm = document.getElementById('bgm');
     if (bgm){
