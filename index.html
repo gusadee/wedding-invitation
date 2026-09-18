@@ -1019,49 +1019,7 @@
     });
   })();
 
-  // ---------- Nama tamu undangan dari URL ----------
-  // Contoh: index.html?to=Bapak%20Budi   atau   ?to=Ibu_Sari   atau   ?to=Saudara_Ahmad
-  // Jika tidak ada parameter URL (URL tidak diubah), default: "Kepada" "Tamu Undangan"
-  (function(){
-    var guestEl = document.getElementById('guestName');
-    var ythEl = document.getElementById('coverYth');
-    if (!guestEl) return;
 
-    var val = '';
-    try {
-      var params = new URLSearchParams(window.location.search);
-      val = params.get('to') || params.get('kepada') || params.get('tamu') || params.get('nama') || params.get('guest') || params.get('u') || '';
-    } catch(e) {}
-
-    if (!val) {
-      var q = window.location.search.slice(1).split('&');
-      for (var i = 0; i < q.length; i++){
-        var p = q[i].split('=');
-        var k = decodeURIComponent(p[0] || '').toLowerCase();
-        if (k === 'to' || k === 'kepada' || k === 'tamu' || k === 'nama' || k === 'guest' || k === 'u'){
-          val = decodeURIComponent((p[1] || '').replace(/\+/g, ' '));
-          break;
-        }
-      }
-    }
-
-    val = val.replace(/_/g, ' ').trim();
-
-    // Jika ada nama dari URL dan bukan 'tamu undangan'
-    if (val && val.toLowerCase() !== 'tamu undangan' && val.toLowerCase() !== 'tamu') {
-      if (ythEl) ythEl.textContent = 'Kepada Yth.';
-      guestEl.textContent = val;
-
-      var rsvpName = document.getElementById('rsvpName');
-      if (rsvpName && !rsvpName.value) rsvpName.value = val;
-      var wishName = document.getElementById('wishName');
-      if (wishName && !wishName.value) wishName.value = val;
-    } else {
-      // Jika URL tidak diubah / tanpa nama spesifik, tampilkan "Kepada" "Tamu Undangan"
-      if (ythEl) ythEl.textContent = 'Kepada';
-      guestEl.textContent = 'Tamu Undangan';
-    }
-  })();
 
   // ---------- Open invitation ----------
   var cover = document.getElementById('cover');
